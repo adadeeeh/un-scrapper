@@ -1,10 +1,8 @@
 import time
 from bs4 import BeautifulSoup
-# from multiprocessing import Pool
-# import multiprocessing
 import initheadless
 import initdb
-# from selenium.webdriver.support.ui import Select
+import query
 from datetime import datetime
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
@@ -12,8 +10,7 @@ browser = initheadless.headless_browser()
 
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
-
-# manager = multiprocessing.Manager()
+initdb.create_prov_kab_db()
 
 def log(text, time):
     print (text, file=open("log.txt", "a"))
@@ -26,10 +23,6 @@ def get_date():
 
 # delete log
 f = open("log.txt", "w").close()
-
-link_sekolah = []
-daftar_link_sekolahkita = []
-daftar_link_provinsi = []
 
 #provinsi
 browser.get("https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!99&99&999!T&T&T&T&1&!1!&")
@@ -50,10 +43,7 @@ for data_provinsi in get_jumlah_provinsi:
                 provinsi.append(list_provinsi[i].get_text())
         print(provinsi)
 
-        insert_query = """insert into provinsi(id_prov, nama_prov) values(%s, %s)"""
-        insert_data = provinsi
-        cursor.execute((insert_query, insert_data))
-        db.commit()
+        query.provinsi(provinsi)
         
     except Exception as ex:
         print(ex)
@@ -93,7 +83,9 @@ def get_kabupaten(url):
                     kabupaten.append(id_provinsi)
                     kabupaten.append(list_kabupaten[i].get_text())
             print(kabupaten)
-            # query di sini
+            
+            query.kabupaten(kabupaten)
+
         except Exception as ex:
             print(ex)
 
