@@ -12,9 +12,9 @@ db = initdb.get_db()
 cursor = initdb.get_cursor(db)
 initdb.create_prov_kab_db()
 
-def log(text, time):
+def log(text):
     print (text, file=open("log.txt", "a"))
-    print (time, file=open("log.txt", "a"))
+    print (get_date(), file=open("log.txt", "a"))
 
 def get_date():
     now = datetime.now()

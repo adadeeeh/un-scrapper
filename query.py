@@ -17,3 +17,8 @@ def moda_ujian(data):
     insert_query = """insert into moda_ujian(jenis_ujian, nama_moda) values(%s, %s)"""
     cursor.execute(insert_query, data)
     db.commit()
+
+def prodi(data):
+    insert_query = """insert into prodi(nama_prodi) values(%s)"""
+    cursor.execute(insert_query, data)
+    db.commit()
