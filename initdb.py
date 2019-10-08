@@ -55,6 +55,18 @@ def create_prov_kab_db():
         cursor.execute(create_provinsi)
         cursor.execute(create_kabupaten)
 
+def create_independent_db():
+    db = pymysql.connect(host, user, password, dbname)
+    cursor = db.cursor()
+
+    try:
+        cursor.execute(set_0)
+        cursor.execute(drop_moda_ujian)
+        cursor.execute(set_1)
+        cursor.execute(create_moda_ujian)
+    except:
+        cursor.execute(create_moda_ujian)
+
 def create_sekolah_db():
     db = pymysql.connect(host, user, password, dbname)
     cursor = db.cursor()
