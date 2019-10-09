@@ -83,3 +83,55 @@ for loop in loop_jenjang:
     except Exception as ex:
         print(ex)
 browser.quit()
+
+#get mata ujian
+browser = initheadless.headless_browser()
+jenjang = ["smp", "sma", "smk", "paketb"]
+for item in jenjang:
+    browser.get("https://hasilun.puspendik.kemdikbud.go.id/#2019!" + item + "!capaian_wilayah!99&99&999!T&T&T&T&1&!1!&")
+    time.sleep(4)
+
+    try:
+        if item == "sma":
+            get_prodi = BeautifulSoup(browser.find_element_by_xpath('//*[@id="jurusan"]').get_attribute("innerHTML"), "lxml")
+            list_prodi = get_prodi.find_all("option")
+            for i in range(0, len(list_prodi)):
+                select = Select(browser.find_element_by_xpath('//*[@id="jurusan"]'))
+                select.select_by_visible_text(list_prodi[i].text.lstrip())
+                time.sleep(4)
+                
+                get_matuji = BeautifulSoup(browser.find_element_by_xpath('//*[@id="matauji"]').get_attribute("innerHTML"), "lxml")
+                list_matuji = get_matuji.find_all("option")
+                for i in range(4, len(list_matuji)):
+                    print(list_matuji[i].text.lstrip())
+                    matuji = list_matuji[i].text.lstrip()
+
+                    query.matuji(matuji)
+
+        else:
+            get_matuji = BeautifulSoup(browser.find_element_by_xpath('//*[@id="matauji"]').get_attribute("innerHTML"), "lxml")
+            list_matuji = get_matuji.find_all("option")
+            if item == "smp":
+                for i in range(1, 5):
+                    print(list_matuji[i].text.lstrip())
+                    matuji = list_matuji[i].text.lstrip()
+                    
+                    query.matuji(matuji)
+            elif item == "paketb":
+                for i in range(5, 7):
+                    print(list_matuji[i].text.lstrip())
+                    matuji = list_matuji[i].text.lstrip()
+
+                    query.matuji(matuji)
+            elif item == "smk":
+                for i in range(4, len(list_matuji)):
+                    print(list_matuji[i].text.lstrip())
+                    matuji = list_matuji[i].text.lstrip()
+
+                    query.matuji(matuji)
+    except Exception as ex:
+        print(ex)
+
+    
+
+browser.quit()

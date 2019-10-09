@@ -22,3 +22,8 @@ def prodi(data):
     insert_query = """insert into prodi(nama_prodi) values(%s)"""
     cursor.execute(insert_query, data)
     db.commit()
+
+def matuji(data):
+    insert_query = """insert into mata_ujian(nama_matuji) values(%s)"""
+    cursor.execute(insert_query, data)
+    db.commit()

@@ -13,6 +13,7 @@ drop_sekolah = """DROP TABLE sekolah"""
 drop_moda_ujian = """drop table moda_ujian"""
 drop_relasi_sekolahmoda = """drop table relasi_sekolahmoda"""
 drop_prodi = """drop table prodi"""
+drop_matuji = """drop table mata_ujian"""
 
 create_provinsi = """CREATE TABLE provinsi (
     id_prov int, nama_prov varchar(256), PRIMARY KEY (id_prov)
@@ -36,6 +37,9 @@ create_relasi_sekolahmoda = """create table relasi_sekolahmoda (
 
 create_prodi = """create table prodi (
     id_prodi int not null auto_increment, nama_prodi varchar(256), primary key (id_prodi))"""
+
+create_matuji = """create table mata_ujian (
+    id_matuji int not null auto_increment, nama_matuji varchar(256), primary key (id_matuji))"""
 
 def get_cursor(db):
     return db.cursor()
@@ -67,12 +71,15 @@ def create_independent_db():
         cursor.execute(set_0)
         cursor.execute(drop_moda_ujian)
         cursor.execute(drop_prodi)
+        cursor.execute(drop_matuji)
         cursor.execute(set_1)
         cursor.execute(create_moda_ujian)
         cursor.execute(create_prodi)
+        cursor.execute(create_matuji)
     except:
         cursor.execute(create_moda_ujian)
         cursor.execute(create_prodi)
+        cursor.execute(create_matuji)
 
 def create_sekolah_db():
     db = pymysql.connect(host, user, password, dbname)
