@@ -1,6 +1,5 @@
 import time
 from bs4 import BeautifulSoup
-# import multiprocessing
 import initheadless
 import initdb
 import query
@@ -11,8 +10,6 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
 # initdb.create_sekolah_db()
-
-# manager = multiprocessing.Manager()
 
 def log(text):
     print (text, file=open("log.txt", "a"))

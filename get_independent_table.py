@@ -5,11 +5,10 @@ import initdb
 import query
 from selenium.webdriver.support.ui import Select
 from datetime import datetime
-from concurrent.futures import ProcessPoolExecutor, as_completed
 
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
-initdb.create_independent_db()
+# initdb.create_independent_db()
 
 def log(text):
     print (text, file=open("log.txt", "a"))

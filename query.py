@@ -27,3 +27,8 @@ def matuji(data):
     insert_query = """insert into mata_ujian(nama_matuji) values(%s)"""
     cursor.execute(insert_query, data)
     db.commit()
+
+def get_id_prodi(nama_prodi):
+    query = """select id_prodi from prodi where nama_prodi=%s"""
+    cursor.execute(query, nama_prodi)
+    return cursor.fetchone()
