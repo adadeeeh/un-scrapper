@@ -31,4 +31,16 @@ def matuji(data):
 def get_id_prodi(nama_prodi):
     query = """select id_prodi from prodi where nama_prodi=%s"""
     cursor.execute(query, nama_prodi)
-    return cursor.fetchone()
+    result = cursor.fetchone()
+    return result[0]
+
+def get_id_matuji(nama_matuji):
+    query = """select id_matuji from mata_ujian where nama_matuji=%s"""
+    cursor.execute(query, nama_matuji)
+    result = cursor.fetchone()
+    return result[0]
+
+def prodi_matuji(data):
+    insert_query = "insert into prodi_punya_matuji(id_prodi, id_matuji, tahun_prodmat) values(%s, %s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit()
