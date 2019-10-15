@@ -8,7 +8,7 @@ from datetime import datetime
 
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
-# initdb.create_independent_db()
+initdb.create_independent_db()
 
 def log(text):
     print (text, file=open("log.txt", "a"))
@@ -87,8 +87,8 @@ browser.quit()
 browser = initheadless.headless_browser()
 jenjang = ["smp", "sma", "smk", "paketb"]
 for item in jenjang:
-    browser.get("https://hasilun.puspendik.kemdikbud.go.id/#2019!" + item + "!capaian_wilayah!99&99&999!T&T&T&T&1&!1!&")
-    time.sleep(4)
+    browser.get("https://hasilun.puspendik.kemdikbud.go.id/#2019!" + item + "!daya_serap!99&99&999!T&T&T&T&1&!1!&")
+    time.sleep(10)
 
     try:
         if item == "sma":
@@ -97,37 +97,31 @@ for item in jenjang:
             for i in range(0, len(list_prodi)):
                 select = Select(browser.find_element_by_xpath('//*[@id="jurusan"]'))
                 select.select_by_visible_text(list_prodi[i].text.lstrip())
-                time.sleep(4)
+                time.sleep(10)
                 
                 get_matuji = BeautifulSoup(browser.find_element_by_xpath('//*[@id="matauji"]').get_attribute("innerHTML"), "lxml")
                 list_matuji = get_matuji.find_all("option")
-                for i in range(4, len(list_matuji)):
+                for i in range(3, len(list_matuji)):
                     print(list_matuji[i].text.lstrip())
                     matuji = list_matuji[i].text.lstrip()
 
                     query.matuji(matuji)
+        elif item == "smp":
+            get_matuji = BeautifulSoup(browser.find_element_by_xpath('//*[@id="matauji"]').get_attribute("innerHTML"), "lxml")
+            list_matuji = get_matuji.find_all("option")
+            for i in range(0, len(list_matuji)-1):
+                print(list_matuji[i].text.lstrip())
+                matuji = list_matuji[i].text.lstrip()
 
+                query.matuji(matuji)
         else:
             get_matuji = BeautifulSoup(browser.find_element_by_xpath('//*[@id="matauji"]').get_attribute("innerHTML"), "lxml")
             list_matuji = get_matuji.find_all("option")
-            if item == "smp":
-                for i in range(1, 5):
-                    print(list_matuji[i].text.lstrip())
-                    matuji = list_matuji[i].text.lstrip()
-                    
-                    query.matuji(matuji)
-            elif item == "paketb":
-                for i in range(5, 7):
-                    print(list_matuji[i].text.lstrip())
-                    matuji = list_matuji[i].text.lstrip()
+            for i in range(3, len(list_matuji)):
+                print(list_matuji[i].text.lstrip())
+                matuji = list_matuji[i].text.lstrip()
 
-                    query.matuji(matuji)
-            elif item == "smk":
-                for i in range(4, len(list_matuji)):
-                    print(list_matuji[i].text.lstrip())
-                    matuji = list_matuji[i].text.lstrip()
-
-                    query.matuji(matuji)
+                query.matuji(matuji)
     except Exception as ex:
         print(ex)
 

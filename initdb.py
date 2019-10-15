@@ -15,6 +15,8 @@ drop_relasi_sekolahmoda = """drop table relasi_sekolahmoda"""
 drop_prodi = """drop table prodi"""
 drop_matuji = """drop table mata_ujian"""
 drop_prodi_matuji = """drop table prodi_punya_matuji"""
+drop_materi_ujian = """drop table materi_ujian"""
+drop_indikator_materi = """drop table indikator_materi"""
 
 create_provinsi = """CREATE TABLE provinsi (
     id_prov int, nama_prov varchar(256), PRIMARY KEY (id_prov)
@@ -45,6 +47,12 @@ create_matuji = """create table mata_ujian (
 create_prodi_matuji = """create table prodi_punya_matuji (
     id_relasiprodmat int not null auto_increment, id_prodi int, id_matuji int, tahun_prodmat int, primary key (id_relasiprodmat), foreign key (id_prodi) references prodi(id_prodi),
     foreign key (id_matuji) references mata_ujian(id_matuji))"""
+
+create_materi_ujian = """create table materi_ujian (
+    id_materi int not null auto_increment, id_matuji int, materi varchar(256), primary key (id_materi), foreign key (id_matuji) references mata_ujian(id_matuji))"""
+
+create_indikator_materi = """create table indikator_materi (
+    id_indikator int not null auto_increment, id_materi int, indikator long varchar, primary key (id_indikator), foreign key (id_materi) references materi_ujian(id_materi))"""
 
 def get_cursor(db):
     return db.cursor()
@@ -98,17 +106,29 @@ def create_prodi_matuji_db():
     except:
         cursor.execute(create_prodi_matuji)
 
+def create_materiujian_indikatormateri():
+    db = pymysql.connect(host, user, password, dbname)
+    cursor = db.cursor()
+
+    try:
+        cursor.execute(set_0)
+        cursor.execute(drop_prodi_matuji)
+        cursor.execute(set_1)
+        cursor.execute(create_prodi_matuji)
+    except:
+        cursor.execute(create_prodi_matuji)
+
 def create_sekolah_db():
     db = pymysql.connect(host, user, password, dbname)
     cursor = db.cursor()
 
     try:
         cursor.execute(set_0)
-        cursor.execute(drop_sekolah)
-        cursor.execute(drop_relasi_sekolahmoda)
+        cursor.execute(drop_materi_ujian)
+        cursor.execute(drop_indikator_materi)
         cursor.execute(set_1)
-        cursor.execute(create_sekolah)
-        cursor.execute(create_relasi_sekolahmoda)
+        cursor.execute(create_materi_ujian)
+        cursor.execute(create_indikator_materi)
     except:
-        cursor.execute(create_sekolah)
-        cursor.execute(create_relasi_sekolahmoda)
+        cursor.execute(materi_ujian)
+        cursor.execute(create_indikator_materi)
