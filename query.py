@@ -44,3 +44,28 @@ def prodi_matuji(data):
     insert_query = "insert into prodi_punya_matuji(id_prodi, id_matuji, tahun_prodmat) values(%s, %s, %s)"
     cursor.execute(insert_query, data)
     db.commit()
+
+def materi_ujian(data):
+    insert_query = "insert into materi_ujian(id_matuji, materi) values(%s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit()
+
+def get_id_matuji_from_materi(data):
+    insert_query = """select id_matuji from materi_ujian where materi=%s"""
+    cursor.execute(insert_query, data)
+    result = cursor.fetchall()
+    if result == ():
+        return result
+    else:
+        return result
+
+# insert_query = """select id_matuji from materi_ujian where materi=%s"""
+# cursor.execute(insert_query, 'MEMBACA NONSASTRA')
+# result = cursor.fetchall()
+# if result == ():
+#     print(result)
+# else:
+#     print(result)
+
+# for item in result:
+#     print(item[0])

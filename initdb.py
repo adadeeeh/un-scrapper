@@ -112,11 +112,14 @@ def create_materiujian_indikatormateri():
 
     try:
         cursor.execute(set_0)
-        cursor.execute(drop_prodi_matuji)
+        cursor.execute(drop_materi_ujian)
+        cursor.execute(drop_indikator_materi)
         cursor.execute(set_1)
-        cursor.execute(create_prodi_matuji)
+        cursor.execute(create_materi_ujian)
+        cursor.execute(create_indikator_materi)
     except:
-        cursor.execute(create_prodi_matuji)
+        cursor.execute(create_materi_ujian)
+        cursor.execute(create_indikator_materi)
 
 def create_sekolah_db():
     db = pymysql.connect(host, user, password, dbname)
