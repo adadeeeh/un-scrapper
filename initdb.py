@@ -133,5 +133,5 @@ def create_sekolah_db():
         cursor.execute(create_materi_ujian)
         cursor.execute(create_indikator_materi)
     except:
-        cursor.execute(materi_ujian)
+        cursor.execute(create_materi_ujian)
         cursor.execute(create_indikator_materi)

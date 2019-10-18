@@ -69,3 +69,34 @@ def get_id_matuji_from_materi(data):
 
 # for item in result:
 #     print(item[0])
+
+def get_id_materi(materi):
+    query = """select id_materi from materi_ujian where materi=%s"""
+    cursor.execute(query, materi)
+    result = cursor.fetchone()
+    return result[0]
+
+def indikator_materi(data):
+    insert_query = "insert into indikator_materi(id_materi, indikator) values(%s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit()
+
+def get_id_materi_by_indikator(data):
+    insert_query = """select id_materi from indikator_materi where indikator=%s"""
+    cursor.execute(insert_query, data)
+    result = cursor.fetchall()
+    if result == ():
+        return result
+    else:
+        return result
+
+# insert_query = """select id_materi from indikator_materi where indikator=%s"""
+# cursor.execute(insert_query, "Melengkapi dialog dengan tepat")
+# result = cursor.fetchall()
+# if result == ():
+#     print(result)
+# else:
+#     print(result)
+
+# for item in result:
+#     print(item[0])
