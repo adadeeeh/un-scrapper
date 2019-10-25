@@ -8,7 +8,7 @@ from datetime import datetime
 
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
-initdb.create_independent_db()
+# initdb.create_independent_db()
 
 def log(text):
     print (text, file=open("log.txt", "a"))
@@ -41,7 +41,7 @@ try:
             moda.append(nama)
             print(moda)
 
-            query.moda_ujian(moda)
+            # query.moda_ujian(moda)
     browser.quit()
 except Exception as ex:
     print(ex)
@@ -67,7 +67,7 @@ for loop in loop_jenjang:
             prodi = jenjang
             print(prodi)
 
-            query.prodi(prodi)
+            # query.prodi(prodi)
 
         elif jenjang == "Paket C":
             continue
@@ -77,7 +77,7 @@ for loop in loop_jenjang:
                 prodi = BeautifulSoup(nama.get_attribute("innerHTML"), "lxml").get_text()
                 print(prodi)
 
-                query.prodi(prodi)
+                # query.prodi(prodi)
 
     except Exception as ex:
         print(ex)
@@ -105,7 +105,7 @@ for item in jenjang:
                     print(list_matuji[i].text.lstrip())
                     matuji = list_matuji[i].text.lstrip()
 
-                    query.matuji(matuji)
+                    # query.matuji(matuji)
         elif item == "smp":
             get_matuji = BeautifulSoup(browser.find_element_by_xpath('//*[@id="matauji"]').get_attribute("innerHTML"), "lxml")
             list_matuji = get_matuji.find_all("option")
@@ -113,7 +113,7 @@ for item in jenjang:
                 print(list_matuji[i].text.lstrip())
                 matuji = list_matuji[i].text.lstrip()
 
-                query.matuji(matuji)
+                # query.matuji(matuji)
         else:
             get_matuji = BeautifulSoup(browser.find_element_by_xpath('//*[@id="matauji"]').get_attribute("innerHTML"), "lxml")
             list_matuji = get_matuji.find_all("option")
@@ -121,7 +121,7 @@ for item in jenjang:
                 print(list_matuji[i].text.lstrip())
                 matuji = list_matuji[i].text.lstrip()
 
-                query.matuji(matuji)
+                # query.matuji(matuji)
     except Exception as ex:
         print(ex)
 

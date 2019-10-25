@@ -10,7 +10,7 @@ browser = initheadless.headless_browser()
 
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
-initdb.create_prov_kab_db()
+# initdb.create_prov_kab_db()
 
 def log(text):
     print (text, file=open("log.txt", "a"))
@@ -43,7 +43,7 @@ for data_provinsi in get_jumlah_provinsi:
                 provinsi.append(list_provinsi[i].get_text())
         print(provinsi)
 
-        query.provinsi(provinsi)
+        # query.provinsi(provinsi)
         
     except Exception as ex:
         print(ex)
@@ -84,7 +84,7 @@ def get_kabupaten(url):
                     kabupaten.append(list_kabupaten[i].get_text())
             print(kabupaten)
             
-            query.kabupaten(kabupaten)
+            # query.kabupaten(kabupaten)
 
         except Exception as ex:
             print(ex)

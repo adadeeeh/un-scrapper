@@ -100,3 +100,26 @@ def get_id_materi_by_indikator(data):
 
 # for item in result:
 #     print(item[0])
+
+def get_id_indikator(data):
+    query = """select id_indikator from indikator_materi where indikator=%s"""
+    cursor.execute(query, data)
+    result = cursor.fetchone()
+    return result[0]
+
+def relasi_matindor(data):
+    insert_query = "insert into relasi_matindor(id_materi, id_prodi, id_indikator, id_matuji, urutan_indikator, tahun_indikator) values(%s, %s, %s, %s, %s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit()
+
+def get_id_moda(data):
+    query = """select id_moda from moda_ujian where jenis_ujian=%s"""
+    cursor.execute(query, data)
+    result = cursor.fetchone()
+    return result[0]
+
+def sekolah(data):
+    insert_query = """insert into sekolah(id_sekolah, id_kota, nama_sekolah, jenjang_sekolah, jenis_sekolah, status_sekolah, npsn)
+                    values(%s, %s, %s, %s, %s, %s, %s)"""
+    cursor.execute(insert_query, data)
+    db.commit()

@@ -9,7 +9,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
-initdb.create_materi_ujian_db()
+# initdb.create_materi_ujian_db()
 
 def log(text):
     print (text, file=open("log.txt", "a"))
@@ -71,7 +71,7 @@ def get_materi_ujian():
             materi_ujian.append(materi)
             print(materi_ujian)
 
-            query.materi_ujian(materi_ujian)
+            # query.materi_ujian(materi_ujian)
 
 for tahun in tahuns:
     for jenjang in jenjangs:

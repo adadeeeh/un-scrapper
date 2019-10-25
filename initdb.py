@@ -17,6 +17,7 @@ drop_matuji = """drop table mata_ujian"""
 drop_prodi_matuji = """drop table prodi_punya_matuji"""
 drop_materi_ujian = """drop table materi_ujian"""
 drop_indikator_materi = """drop table indikator_materi"""
+drop_relasi_matindor = "drop table relasi_matindor"
 
 create_provinsi = """CREATE TABLE provinsi (
     id_prov int, nama_prov varchar(256), PRIMARY KEY (id_prov)
@@ -28,7 +29,7 @@ create_kabupaten = """CREATE TABLE kota_kabupaten (
 
 create_sekolah = """CREATE TABLE sekolah (
     id_sekolah int not null auto_increment, id_kota int, nama_sekolah varchar(256), jenjang_sekolah varchar(10), jenis_sekolah varchar(50), status_sekolah varchar(8),
-    nosn varchar(256), PRIMARY KEY (id_sekolah), FOREIGN KEY (id_kota) REFERENCES kota_kabupaten(id_kota)
+    npsn varchar(256), PRIMARY KEY (id_sekolah), FOREIGN KEY (id_kota) REFERENCES kota_kabupaten(id_kota)
     );"""
 
 create_moda_ujian = """create table moda_ujian (
@@ -53,6 +54,11 @@ create_materi_ujian = """create table materi_ujian (
 
 create_indikator_materi = """create table indikator_materi (
     id_indikator int not null auto_increment, id_materi int, indikator long varchar, primary key (id_indikator), foreign key (id_materi) references materi_ujian(id_materi))"""
+
+create_relasi_matindor = """create table relasi_matindor (
+    id_relasimatindor int not null auto_increment, id_materi int, id_prodi int, id_indikator int, id_matuji int, urutan_indikator numeric, tahun_indikator int,
+    primary key (id_relasimatindor), foreign key (id_materi) references materi_ujian(id_materi), foreign key (id_prodi) references prodi(id_prodi),
+    foreign key (id_indikator) references indikator_materi(id_indikator), foreign key (id_matuji) references mata_ujian(id_matuji));"""
 
 def get_cursor(db):
     return db.cursor()
@@ -130,17 +136,26 @@ def create_indikator_db():
     except:
         cursor.execute(create_indikator_materi)
 
+def create_relasi_matindor_db():
+    db = pymysql.connect(host, user, password, dbname)
+    cursor = db.cursor()
+
+    try:
+        cursor.execute(set_0)
+        cursor.execute(drop_relasi_matindor)
+        cursor.execute(set_1)
+        cursor.execute(create_relasi_matindor)
+    except:
+        cursor.execute(create_relasi_matindor)
+
 def create_sekolah_db():
     db = pymysql.connect(host, user, password, dbname)
     cursor = db.cursor()
 
     try:
         cursor.execute(set_0)
-        cursor.execute(drop_materi_ujian)
-        cursor.execute(drop_indikator_materi)
+        cursor.execute(drop_sekolah)
         cursor.execute(set_1)
-        cursor.execute(create_materi_ujian)
-        cursor.execute(create_indikator_materi)
+        cursor.execute(create_sekolah)
     except:
-        cursor.execute(create_materi_ujian)
-        cursor.execute(create_indikator_materi)
+        cursor.execute(create_sekolah)
