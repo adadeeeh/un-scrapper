@@ -9,7 +9,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
-initdb.create_sekolah_db()
+# initdb.create_sekolah_db()
 
 def log(text):
     print (text, file=open("log.txt", "a"))
@@ -29,101 +29,82 @@ def get_sekolah(url):
         browser.get(url)
         time.sleep(5)
 
-        get_provinsi = BeautifulSoup(browser.find_element_by_id("provinsi").get_attribute("innerHTML"), "lxml")
-        list_provinsi = get_provinsi.find_all("option")
-        select_provinsi = Select(browser.find_element_by_id("provinsi"))
-        for provinsi in list_provinsi:
-            provinsi = provinsi.text.lstrip()
-            select_provinsi.select_by_visible_text(provinsi)
-            time.sleep(5)
+        # get_provinsi = BeautifulSoup(browser.find_element_by_id("provinsi").get_attribute("innerHTML"), "lxml")
+        # list_provinsi = get_provinsi.find_all("option")
+        # select_provinsi = Select(browser.find_element_by_id("provinsi"))
+        # for provinsi in list_provinsi:
+        #     provinsi = provinsi.text.lstrip()
+        #     select_provinsi.select_by_visible_text(provinsi)
+        #     time.sleep(5)
 
-            get_kota = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div/div/div/div/table/tbody/tr[2]/td[3]/select").get_attribute("innerHTML"), "lxml")
-            list_kota = get_kota.find_all("option")
-            select_kota = Select(browser.find_element_by_id("rayon"))
-            for i in range(0, len(list_kota)):
-                if i > 0:
-                    kota = list_kota[i].text.lstrip()
-                    select_kota.select_by_visible_text(kota)
-                    time.sleep(5)
+        get_kota = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div/div/div/div/table/tbody/tr[2]/td[3]/select").get_attribute("innerHTML"), "lxml")
+        list_kota = get_kota.find_all("option")
+        select_kota = Select(browser.find_element_by_id("rayon"))
+        for i in range(0, len(list_kota)):
+            if i > 0:
+                kota = list_kota[i].text.lstrip()
+                select_kota.select_by_visible_text(kota)
+                time.sleep(5)
 
-                    get_jenjang = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr/td/select/option[@selected='']").get_attribute("innerHTML"), "lxml")
-                    jenjang = get_jenjang.get_text()
-                    
-                    if jenjang == "SMP/MTs" or jenjang == "SMK":
-                        loop_jenis = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td").get_attribute("innerHTML"), "lxml").find_all("input")
-                        get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td/input")
-                        if jenjang == "SMP/MTs" or jenjang == "Paket B":
-                            loop = len(loop_jenis)-1
-                        elif jenjang == "SMK":
-                            loop = len(loop_jenis)
-                        for i in range(0, loop):
-                            if i == 0 and jenjang == "SMP/MTs":
-                                jenis = "SMP"
-                            elif i == 1 and jenjang == "SMP/MTs":
-                                jenis = "MTs"
-                            elif i == 2 and jenjang == "SMP/MTs":
-                                jenis = "SMPT"
-                            elif i == 0 and jenjang == "SMK":
-                                jenis = "SMK"
-                            get_jenis[i].click()
-                            time.sleep(5)
-                            
-                            try:
-                                get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
-                                id_kabupaten = get_id_kabupaten.get_text()
-                                get_data(browser, id_kabupaten, jenjang, jenis)
-                            except:
-                                pass
-                            
-                            get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[1]/input")
-                            select_kota = Select(browser.find_element_by_id("rayon"))
-                            select_provinsi = Select(browser.find_element_by_id("provinsi"))
-                    if jenjang == "Paket B":
+                get_jenjang = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr/td/select/option[@selected='']").get_attribute("innerHTML"), "lxml")
+                jenjang = get_jenjang.get_text()
+                
+                if jenjang == "SMP/MTs" or jenjang == "SMK":
+                    loop_jenis = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td").get_attribute("innerHTML"), "lxml").find_all("input")
+                    get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td/input")
+                    if jenjang == "SMP/MTs" or jenjang == "Paket B":
+                        loop = len(loop_jenis)-1
+                    elif jenjang == "SMK":
+                        loop = len(loop_jenis)
+                    for i in range(0, loop):
+                        if i == 0 and jenjang == "SMP/MTs":
+                            jenis = "SMP"
+                        elif i == 1 and jenjang == "SMP/MTs":
+                            jenis = "MTs"
+                        elif i == 2 and jenjang == "SMP/MTs":
+                            jenis = "SMPT"
+                        elif i == 0 and jenjang == "SMK":
+                            jenis = "SMK"
+                        get_jenis[i].click()
+                        time.sleep(5)
+                        
                         try:
                             get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
                             id_kabupaten = get_id_kabupaten.get_text()
-                            jenis = ""
                             get_data(browser, id_kabupaten, jenjang, jenis)
                         except:
                             pass
                         
                         get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[1]/input")
                         select_kota = Select(browser.find_element_by_id("rayon"))
-                        select_provinsi = Select(browser.find_element_by_id("provinsi"))
+                        # select_provinsi = Select(browser.find_element_by_id("provinsi"))
+                if jenjang == "Paket B":
+                    try:
+                        get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
+                        id_kabupaten = get_id_kabupaten.get_text()
+                        jenis = ""
+                        get_data(browser, id_kabupaten, jenjang, jenis)
+                    except:
+                        pass
+                    
+                    get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[1]/input")
+                    select_kota = Select(browser.find_element_by_id("rayon"))
+                    # select_provinsi = Select(browser.find_element_by_id("provinsi"))
+                if jenjang == "SMA/MA":
+                    loop_jenis = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]").get_attribute("innerHTML"), "lxml").find_all("input")
+                    get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
                     if jenjang == "SMA/MA":
-                        loop_jenis = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]").get_attribute("innerHTML"), "lxml").find_all("input")
-                        get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
-                        if jenjang == "SMA/MA":
-                            loop = len(loop_jenis)-1
-                        for i in range(0, loop):
-                            if i == 0:
-                                jenis = "SMA"
-                            elif i == 1:
-                                jenis = "MA"
-                            get_jenis[i].click()
-                            time.sleep(5)
-                            
-                            loop_prodi = BeautifulSoup(browser.find_element_by_id("jurusan").get_attribute("innerHTML"), "lxml").find_all("option")
-                            select_prodi = Select(browser.find_element_by_id("jurusan"))
-                            for prodi in loop_prodi:
-                                select_prodi.select_by_visible_text(prodi.text.lstrip())
-                                time.sleep(7)
-
-                                try:
-                                    get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
-                                    id_kabupaten = get_id_kabupaten.get_text()
-                                    get_data(browser, id_kabupaten, jenjang, jenis)
-                                except:
-                                    pass
-                                
-                                get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
-                                select_kota = Select(browser.find_element_by_id("rayon"))
-                                select_provinsi = Select(browser.find_element_by_id("provinsi"))
-                                select_prodi = Select(browser.find_element_by_id("jurusan"))
-                    if jenjang == "Paket C":
+                        loop = len(loop_jenis)-1
+                    for i in range(0, loop):
+                        if i == 0:
+                            jenis = "SMA"
+                        elif i == 1:
+                            jenis = "MA"
+                        get_jenis[i].click()
+                        time.sleep(5)
+                        
                         loop_prodi = BeautifulSoup(browser.find_element_by_id("jurusan").get_attribute("innerHTML"), "lxml").find_all("option")
                         select_prodi = Select(browser.find_element_by_id("jurusan"))
-                        jenis = ""
                         for prodi in loop_prodi:
                             select_prodi.select_by_visible_text(prodi.text.lstrip())
                             time.sleep(7)
@@ -137,8 +118,27 @@ def get_sekolah(url):
                             
                             get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
                             select_kota = Select(browser.find_element_by_id("rayon"))
-                            select_provinsi = Select(browser.find_element_by_id("provinsi"))
+                            # select_provinsi = Select(browser.find_element_by_id("provinsi"))
                             select_prodi = Select(browser.find_element_by_id("jurusan"))
+                if jenjang == "Paket C":
+                    loop_prodi = BeautifulSoup(browser.find_element_by_id("jurusan").get_attribute("innerHTML"), "lxml").find_all("option")
+                    select_prodi = Select(browser.find_element_by_id("jurusan"))
+                    jenis = ""
+                    for prodi in loop_prodi:
+                        select_prodi.select_by_visible_text(prodi.text.lstrip())
+                        time.sleep(7)
+
+                        try:
+                            get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
+                            id_kabupaten = get_id_kabupaten.get_text()
+                            get_data(browser, id_kabupaten, jenjang, jenis)
+                        except:
+                            pass
+                        
+                        get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
+                        select_kota = Select(browser.find_element_by_id("rayon"))
+                        # select_provinsi = Select(browser.find_element_by_id("provinsi"))
+                        select_prodi = Select(browser.find_element_by_id("jurusan"))
         browser.quit()
     except Exception as ex:
         print(ex)
@@ -166,6 +166,8 @@ def get_data(browser, id_kabupaten, jenjang, jenis):
                 jenis = "PONPES"
             sekolah.pop(4)
             sekolah.insert(4, jenis)
+        if jenjang == "Paket C":
+            sekolah[0] = "C" + sekolah[0]
         id_sekolah = query.get_id_sekolah(sekolah[2])
         if id_sekolah:
             continue
@@ -194,9 +196,6 @@ for jenjang in jenjangs:
                 moda = "1"
             url = f'https://hasilun.puspendik.kemdikbud.go.id/#2019!{jenjang}!capaian!{i}&01&999!T&T&1&T&1&{moda}!3!&'
             links.append(url)
-            # print(url)
-
-# print(links)
 
 with ProcessPoolExecutor(max_workers=1) as executor:
     futures = [ executor.submit(get_sekolah, url) for url in links ]

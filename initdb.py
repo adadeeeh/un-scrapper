@@ -24,11 +24,11 @@ create_provinsi = """CREATE TABLE provinsi (
     );"""
 
 create_kabupaten = """CREATE TABLE kota_kabupaten (
-    id_kota int, id_prov int, nama_kota varchar(256), PRIMARY KEY (id_kota), FOREIGN KEY (id_prov) REFERENCES provinsi(id_prov)
+    id_kota varchar(256), id_prov int, nama_kota varchar(256), PRIMARY KEY (id_kota), FOREIGN KEY (id_prov) REFERENCES provinsi(id_prov)
     );"""
 
 create_sekolah = """CREATE TABLE sekolah (
-    id_sekolah int not null auto_increment, id_kota int, nama_sekolah varchar(256), jenjang_sekolah varchar(10), jenis_sekolah varchar(50), status_sekolah varchar(8),
+    id_sekolah varchar(256) not null auto_increment, id_kota int, nama_sekolah varchar(256), jenjang_sekolah varchar(10), jenis_sekolah varchar(50), status_sekolah varchar(8),
     npsn varchar(256), PRIMARY KEY (id_sekolah), FOREIGN KEY (id_kota) REFERENCES kota_kabupaten(id_kota)
     );"""
 
@@ -36,7 +36,7 @@ create_moda_ujian = """create table moda_ujian (
     id_moda int not null auto_increment, jenis_ujian char(4), nama_moda varchar(256), primary key (id_moda))"""
 
 create_relasi_sekolahmoda = """create table relasi_sekolahmoda (
-	id_relasi int not null auto_increment, id_sekolah int, id_moda int, tahun_ajaran int,
+	id_relasi int not null auto_increment, id_sekolah varchar(256), id_moda int, tahun_ajaran int,
     primary key (id_relasi, id_sekolah, id_moda), foreign key (id_sekolah) references sekolah(id_sekolah), foreign key (id_moda) references moda_ujian(id_moda));"""
 
 create_prodi = """create table prodi (
