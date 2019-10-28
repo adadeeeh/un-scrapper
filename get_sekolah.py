@@ -52,7 +52,7 @@ def get_sekolah(url):
                     if jenjang == "SMP/MTs" or jenjang == "SMK":
                         loop_jenis = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td").get_attribute("innerHTML"), "lxml").find_all("input")
                         get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td/input")
-                        if jenjang == "SMP/MTs":
+                        if jenjang == "SMP/MTs" or jenjang == "Paket B":
                             loop = len(loop_jenis)-1
                         elif jenjang == "SMK":
                             loop = len(loop_jenis)
@@ -68,61 +68,135 @@ def get_sekolah(url):
                             get_jenis[i].click()
                             time.sleep(5)
                             
-                            get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
-                            id_kabupaten = get_id_kabupaten.get_text()
-
-                            get_sekolah = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/tbody/tr")
-                            for data_sekolah in get_sekolah:
-                                sekolah = []
-                                soup_sekolah = BeautifulSoup(data_sekolah.get_attribute("innerHTML"), "lxml")
-                                list_sekolah = soup_sekolah.find_all("td")
-                                for k in range(1, 5):
-                                    sekolah.append(list_sekolah[k].get_text())
-                                sekolah.insert(1, id_kabupaten)
-                                sekolah.insert(3, jenjang)
-                                npsn = sekolah.pop(4)
-                                sekolah.append(npsn)
-                                sekolah.insert(4, jenis)
-                                print(sekolah)
-
-                                query.sekolah(sekolah)
+                            try:
+                                get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
+                                id_kabupaten = get_id_kabupaten.get_text()
+                                get_data(browser, id_kabupaten, jenjang, jenis)
+                            except:
+                                pass
                             
                             get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[1]/input")
                             select_kota = Select(browser.find_element_by_id("rayon"))
                             select_provinsi = Select(browser.find_element_by_id("provinsi"))
+                    if jenjang == "Paket B":
+                        try:
+                            get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
+                            id_kabupaten = get_id_kabupaten.get_text()
+                            jenis = ""
+                            get_data(browser, id_kabupaten, jenjang, jenis)
+                        except:
+                            pass
+                        
+                        get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[1]/input")
+                        select_kota = Select(browser.find_element_by_id("rayon"))
+                        select_provinsi = Select(browser.find_element_by_id("provinsi"))
+                    if jenjang == "SMA/MA":
+                        loop_jenis = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]").get_attribute("innerHTML"), "lxml").find_all("input")
+                        get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
+                        if jenjang == "SMA/MA":
+                            loop = len(loop_jenis)-1
+                        for i in range(0, loop):
+                            if i == 0:
+                                jenis = "SMA"
+                            elif i == 1:
+                                jenis = "MA"
+                            get_jenis[i].click()
+                            time.sleep(5)
+                            
+                            loop_prodi = BeautifulSoup(browser.find_element_by_id("jurusan").get_attribute("innerHTML"), "lxml").find_all("option")
+                            select_prodi = Select(browser.find_element_by_id("jurusan"))
+                            for prodi in loop_prodi:
+                                select_prodi.select_by_visible_text(prodi.text.lstrip())
+                                time.sleep(7)
+
+                                try:
+                                    get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
+                                    id_kabupaten = get_id_kabupaten.get_text()
+                                    get_data(browser, id_kabupaten, jenjang, jenis)
+                                except:
+                                    pass
+                                
+                                get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
+                                select_kota = Select(browser.find_element_by_id("rayon"))
+                                select_provinsi = Select(browser.find_element_by_id("provinsi"))
+                                select_prodi = Select(browser.find_element_by_id("jurusan"))
+                    if jenjang == "Paket C":
+                        loop_prodi = BeautifulSoup(browser.find_element_by_id("jurusan").get_attribute("innerHTML"), "lxml").find_all("option")
+                        select_prodi = Select(browser.find_element_by_id("jurusan"))
+                        jenis = ""
+                        for prodi in loop_prodi:
+                            select_prodi.select_by_visible_text(prodi.text.lstrip())
+                            time.sleep(7)
+
+                            try:
+                                get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
+                                id_kabupaten = get_id_kabupaten.get_text()
+                                get_data(browser, id_kabupaten, jenjang, jenis)
+                            except:
+                                pass
+                            
+                            get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
+                            select_kota = Select(browser.find_element_by_id("rayon"))
+                            select_provinsi = Select(browser.find_element_by_id("provinsi"))
+                            select_prodi = Select(browser.find_element_by_id("jurusan"))
         browser.quit()
     except Exception as ex:
         print(ex)
         browser.quit()
 
-def get_data(browser, jenis, jenjang):
-    try:
-        get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
-        id_kabupaten = get_id_kabupaten.get_text()
-
-        get_sekolah = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/tbody/tr")
-        for data_sekolah in get_sekolah:
-            sekolah = []
-            soup_sekolah = BeautifulSoup(data_sekolah.get_attribute("innerHTML"), "lxml")
-            list_sekolah = soup_sekolah.find_all("td")
-            for k in range(1, 5):
-                sekolah.append(list_sekolah[k].get_text())
-            sekolah.insert(1, id_kabupaten)
-            sekolah.insert(3, jenjang)
-            npsn = sekolah.pop(4)
-            sekolah.append(npsn)
+def get_data(browser, id_kabupaten, jenjang, jenis):
+    get_sekolah = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/tbody/tr")
+    for data_sekolah in get_sekolah:
+        sekolah = []
+        soup_sekolah = BeautifulSoup(data_sekolah.get_attribute("innerHTML"), "lxml")
+        list_sekolah = soup_sekolah.find_all("td")
+        for k in range(1, 5):
+            sekolah.append(list_sekolah[k].get_text())
+        sekolah.insert(1, id_kabupaten)
+        sekolah.insert(3, jenjang)
+        npsn = sekolah.pop(4)
+        sekolah.append(npsn)
+        sekolah.insert(4, jenis)
+        if jenjang == "Paket B" or jenjang == "Paket C":
+            nama_sekolah = sekolah[2]
+            split_nama = nama_sekolah.split(" ")
+            if split_nama[0] == "PKBM":
+                jenis = "PKBM"
+            else:
+                jenis = "PONPES"
+            sekolah.pop(4)
             sekolah.insert(4, jenis)
-            print(sekolah)
-
-            query.sekolah(sekolah)
-    except Exception as ex:
-        print(ex)
+        id_sekolah = query.get_id_sekolah(sekolah[2])
+        if id_sekolah:
+            continue
+        print(sekolah)
+        query.sekolah(sekolah)
 
 links = [
             # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&01&999!T&T&1&T&1&unbk!3!&",
             # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&01&999!T&T&1&T&1&unkp!3!&",
-            "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!capaian!01&01&999!T&T&1&T&1&unbk!3!&"
+            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!b&T&T&T&1&unbk!3!&",
+            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!b&T&T&T&1&unkp!3!&",
+            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!capaian!01&01&999!T&T&1&T&1&unbk!3!&",
+            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!capaian!01&01&999!T&T&1&T&1&unkp!3!&",
+            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketb!capaian!01&01&999!T&T&T&T&1&!3!&",
+            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketc!capaian!01&01&999!T&T&T&T&1&!3!&"
         ]
+
+jenjangs = ["smp", "sma", "smk", "paketb", "paketc"]
+modas = ["unbk", "unkp"]
+for jenjang in jenjangs:
+    for moda in modas:
+        for i in range(1, 35):
+            if i < 10:
+                i = "0"+str(i)
+            if jenjang == "paketb" or jenjang == "paketc":
+                moda = "1"
+            url = f'https://hasilun.puspendik.kemdikbud.go.id/#2019!{jenjang}!capaian!{i}&01&999!T&T&1&T&1&{moda}!3!&'
+            links.append(url)
+            # print(url)
+
+# print(links)
 
 with ProcessPoolExecutor(max_workers=1) as executor:
     futures = [ executor.submit(get_sekolah, url) for url in links ]

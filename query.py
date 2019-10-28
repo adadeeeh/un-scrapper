@@ -123,3 +123,12 @@ def sekolah(data):
                     values(%s, %s, %s, %s, %s, %s, %s)"""
     cursor.execute(insert_query, data)
     db.commit()
+
+def get_id_sekolah(data):
+    query = """select id_sekolah from sekolah where nama_sekolah=%s"""
+    cursor.execute(query, data)
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        pass
