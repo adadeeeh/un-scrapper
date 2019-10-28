@@ -68,24 +68,14 @@ def get_sekolah(url):
                         get_jenis[i].click()
                         time.sleep(5)
                         
-                        try:
-                            get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
-                            id_kabupaten = get_id_kabupaten.get_text()
-                            get_data(browser, id_kabupaten, jenjang, jenis)
-                        except:
-                            pass
+                        get_data(browser, jenjang, jenis)
                         
                         get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[1]/input")
                         select_kota = Select(browser.find_element_by_id("rayon"))
                         # select_provinsi = Select(browser.find_element_by_id("provinsi"))
                 if jenjang == "Paket B":
-                    try:
-                        get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
-                        id_kabupaten = get_id_kabupaten.get_text()
-                        jenis = ""
-                        get_data(browser, id_kabupaten, jenjang, jenis)
-                    except:
-                        pass
+                    jenis = ""
+                    get_data(browser, jenjang, jenis)
                     
                     get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[1]/input")
                     select_kota = Select(browser.find_element_by_id("rayon"))
@@ -109,12 +99,7 @@ def get_sekolah(url):
                             select_prodi.select_by_visible_text(prodi.text.lstrip())
                             time.sleep(7)
 
-                            try:
-                                get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
-                                id_kabupaten = get_id_kabupaten.get_text()
-                                get_data(browser, id_kabupaten, jenjang, jenis)
-                            except:
-                                pass
+                            get_data(browser, jenjang, jenis)
                             
                             get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
                             select_kota = Select(browser.find_element_by_id("rayon"))
@@ -128,12 +113,7 @@ def get_sekolah(url):
                         select_prodi.select_by_visible_text(prodi.text.lstrip())
                         time.sleep(7)
 
-                        try:
-                            get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
-                            id_kabupaten = get_id_kabupaten.get_text()
-                            get_data(browser, id_kabupaten, jenjang, jenis)
-                        except:
-                            pass
+                        get_data(browser, jenjang, jenis)
                         
                         get_jenis = browser.find_elements_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr[3]/td[2]/input")
                         select_kota = Select(browser.find_element_by_id("rayon"))
@@ -144,7 +124,9 @@ def get_sekolah(url):
         print(ex)
         browser.quit()
 
-def get_data(browser, id_kabupaten, jenjang, jenis):
+def get_data(browser, jenjang, jenis):
+    get_id_kabupaten = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/thead/tr[3]/th[2]").get_attribute("innerHTML"), "lxml")
+    id_kabupaten = get_id_kabupaten.get_text()
     get_sekolah = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[2]/div/div[3]/table/tbody/tr")
     for data_sekolah in get_sekolah:
         sekolah = []
@@ -168,6 +150,14 @@ def get_data(browser, id_kabupaten, jenjang, jenis):
             sekolah.insert(4, jenis)
         if jenjang == "Paket C":
             sekolah[0] = "C" + sekolah[0]
+        if jenjang == "SMP/MTs":
+            sekolah[0] = "SMP" + sekolah[0]
+        if jenjang == "SMA/MA":
+            sekolah[0] = "SMA" + sekolah[0]
+        if jenjang == "SMK":
+            sekolah[0] = "SMK" + sekolah[0]
+        if jenjang == "Paket B":
+            sekolah[0] = "B" + sekolah[0]
         id_sekolah = query.get_id_sekolah(sekolah[2])
         if id_sekolah:
             continue

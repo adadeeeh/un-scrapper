@@ -28,7 +28,7 @@ create_kabupaten = """CREATE TABLE kota_kabupaten (
     );"""
 
 create_sekolah = """CREATE TABLE sekolah (
-    id_sekolah varchar(256) not null auto_increment, id_kota int, nama_sekolah varchar(256), jenjang_sekolah varchar(10), jenis_sekolah varchar(50), status_sekolah varchar(8),
+    id_sekolah varchar(256) not null, id_kota int, nama_sekolah varchar(256), jenjang_sekolah varchar(10), jenis_sekolah varchar(50), status_sekolah varchar(8),
     npsn varchar(256), PRIMARY KEY (id_sekolah), FOREIGN KEY (id_kota) REFERENCES kota_kabupaten(id_kota)
     );"""
 
@@ -159,3 +159,15 @@ def create_sekolah_db():
         cursor.execute(create_sekolah)
     except:
         cursor.execute(create_sekolah)
+
+def create_relasi_sekolah_moda_db():
+    db = pymysql.connect(host, user, password, dbname)
+    cursor = db.cursor()
+
+    try:
+        cursor.execute(set_0)
+        cursor.execute(drop_relasi_sekolahmoda)
+        cursor.execute(set_1)
+        cursor.execute(create_relasi_sekolahmoda)
+    except:
+        cursor.execute(create_relasi_sekolahmoda)

@@ -132,3 +132,17 @@ def get_id_sekolah(data):
         return result[0]
     else:
         pass
+
+def relasi_sekolah_moda(data):
+    insert_query = "insert into relasi_sekolahmoda(id_sekolah, id_moda, tahun_ajaran) values(%s, %s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit()
+
+def get_id_relasi_sekolah_moda(data):
+    query = """select id_sekolah from relasi_sekolahmoda where id_sekolah=%s"""
+    cursor.execute(query, data)
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        pass
