@@ -82,7 +82,7 @@ def get_data(browser, moda):
             continue
 
         print(data_relasi)
-        query.relasi_sekolah_moda(data_relasi)
+        # query.relasi_sekolah_moda(data_relasi)
 
 links = [
             # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&99&999!T&T&T&T&1&unbk!3!&",
