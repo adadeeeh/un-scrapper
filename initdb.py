@@ -18,7 +18,7 @@ drop_prodi_matuji = """drop table prodi_punya_matuji"""
 drop_materi_ujian = """drop table materi_ujian"""
 drop_indikator_materi = """drop table indikator_materi"""
 drop_relasi_matindor = "drop table relasi_matindor"
-drop_sekolah_memiliki_prodi = "drop table sekolah_memilik_prodi"
+drop_sekolah_memiliki_prodi = "drop table sekolah_memiliki_prodi"
 
 create_provinsi = """CREATE TABLE provinsi (
     id_prov int, nama_prov varchar(256), PRIMARY KEY (id_prov)
@@ -62,8 +62,8 @@ create_relasi_matindor = """create table relasi_matindor (
     foreign key (id_indikator) references indikator_materi(id_indikator), foreign key (id_matuji) references mata_ujian(id_matuji));"""
 
 create_sekolah_memiliki_prodi = """create table sekolah_memiliki_prodi (
-    id_relasisekolahprodi int not null auto_increment, id_sekolah varchar(256), id_prodi int, jumlah_siswa int, tahun_jumlahsiswa int, primary_key (id_relasisekolahprodi, id_sekolah, id_prodi)
-    foreign_key (id_sekolah) references sekolah(id_sekolah), foreign_key (id_prodi) references prodi(id_prodi));"""
+    id_relasisekolahprodi int not null auto_increment, id_sekolah varchar(256), id_prodi int, jumlah_siswa int, tahun_jumlahsiswa int, primary key (id_relasisekolahprodi, id_sekolah, id_prodi),
+    foreign key (id_sekolah) references sekolah(id_sekolah), foreign key (id_prodi) references prodi(id_prodi));"""
 
 def get_cursor(db):
     return db.cursor()
