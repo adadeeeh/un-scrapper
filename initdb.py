@@ -21,6 +21,7 @@ drop_relasi_matindor = "drop table relasi_matindor"
 drop_sekolah_memiliki_prodi = "drop table sekolah_memiliki_prodi"
 drop_nilai_matuji = "drop table nilai_matuji"
 drop_soal_rilis = "drop table soal_rilis"
+drop_infografis_wilayah = "drop infografis_wilayah"
 
 create_provinsi = """CREATE TABLE provinsi (
     id_prov int, nama_prov varchar(256), PRIMARY KEY (id_prov)
@@ -74,6 +75,10 @@ create_nilai_matuji = """create table nilai_matuji (
 
 create_soal_rilis = """create table soal_rilis (
     id_soalrilis int not null auto_increment, tahun int, link varchar(256), judul varchar(256), primary key (id_soalrilis));"""
+
+create_infografis_wilayah = """create table infografis_wilayah (
+    id_infografis int not null auto_increment, id_prov int, tahun int, jenjang_sekolah varchar(10), jenis varchar(10), link varchar(256),
+    primary key(id_infografis), foreign key (id_prov) references provinsi(id_prov));"""
 
 def get_cursor(db):
     return db.cursor()
@@ -222,3 +227,15 @@ def create_soal_rilis_db():
         cursor.execute(create_soal_rilis)
     except:
         cursor.execute(create_soal_rilis)
+
+def create_infografis_wilayah_db():
+    db = pymysql.connect(host, user, password, dbname)
+    cursor = db.cursor()
+
+    try:
+        cursor.execute(set_0)
+        cursor.execute(drop_infografis_wilayah)
+        cursor.execute(set_1)
+        cursor.execute(create_infografis_wilayah)
+    except:
+        cursor.execute(create_infografis_wilayah)

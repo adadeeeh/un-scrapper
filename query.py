@@ -161,3 +161,17 @@ def soal_rilis(data):
     insert_query = "insert into soal_rilis(tahun, link, judul) values(%s, %s, %s)"
     cursor.execute(insert_query, data)
     db.commit()
+
+def get_id_provinsi(data):
+    query = """select id_prov from provinsi where nama_prov=%s"""
+    cursor.execute(query, data)
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        pass
+
+def infografis(data):
+    insert_query = "insert into infografis_wilayah(id_prov, tahun, jenjang_sekolah, jenis, link) values(%s, %s, %s, %s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit()

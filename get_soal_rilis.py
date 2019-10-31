@@ -38,6 +38,8 @@ def get_soal_rilis(url):
                 judul = link.text.lstrip().rstrip()
                 if "2019" in judul:
                     tahun = "2019"
+                elif "2018" in judul:
+                    tahun = "2018"
 
                 data.append(tahun)
                 data.append(link.get("href"))
