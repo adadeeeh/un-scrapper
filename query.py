@@ -156,3 +156,8 @@ def nilai_matuji(data):
     insert_query = "insert into nilai_matuji(id_matuji, id_prodi, id_sekolah, avg_matuji, tahun_avgmatuji) values(%s, %s, %s, %s, %s)"
     cursor.execute(insert_query, data)
     db.commit()
+
+def soal_rilis(data):
+    insert_query = "insert into soal_rilis(tahun, link, judul) values(%s, %s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit()
