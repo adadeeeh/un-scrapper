@@ -151,3 +151,8 @@ def relasi_sekolah_memiliki_prodi(data):
     insert_query = "insert into sekolah_memiliki_prodi(id_sekolah, id_prodi, jumlah_siswa, tahun_jumlahsiswa) values(%s, %s, %s, %s)"
     cursor.execute(insert_query, data)
     db.commit()
+
+def nilai_matuji(data):
+    insert_query = "insert into nilai_matuji(id_matuji, id_prodi, id_sekolah, avg_matuji, tahun_avgmatuji) values(%s, %s, %s, %s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit()
