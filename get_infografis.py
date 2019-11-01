@@ -9,7 +9,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
-initdb.create_infografis_wilayah_db()
+# initdb.create_infografis_wilayah_db()
 
 def log(text):
     print (text, file=open("log.txt", "a"))

@@ -1,0 +1,134 @@
+import time
+from bs4 import BeautifulSoup
+import initheadless
+import initdb
+import query
+from selenium.webdriver.support.ui import Select
+from datetime import datetime
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
+db = initdb.get_db()
+cursor = initdb.get_cursor(db)
+initdb.create_nilai_materi_db()
+
+def log(text):
+    print (text, file=open("log.txt", "a"))
+    print (get_date(), file=open("log.txt", "a"))
+
+def get_date():
+    now = datetime.now()
+    dt = now.strftime("%d/%m/%Y %H:%M:%S")
+    return dt
+
+# delete log
+f = open("log.txt", "w").close()
+
+def get_nilai_materi(url):
+    try:
+        browser = initheadless.headless_browser()
+        browser.get(url)
+        time.sleep(5)
+
+        get_kota = BeautifulSoup(browser.find_element_by_xpath("//div[3]/div[3]/div/div[1]/div/table/tbody/tr[2]/td[2]/select").get_attribute("innerHTML"), "lxml")
+        list_kota = get_kota.find_all("option")
+        list_kota.pop(0)
+        select_kota = Select(browser.find_element_by_id("rayon"))
+        for kota in list_kota:
+            select_kota.select_by_visible_text(kota.text.lstrip())
+            time.sleep(5)
+
+            list_sekolah = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[1]/div/table/tbody/tr[2]/td[3]/select/option")
+            list_sekolah.pop(0)
+            select_sekolah = Select(browser.find_element_by_id("sekolah"))
+            for i in range(0, len(list_sekolah)):
+                sekolah = BeautifulSoup(list_sekolah[i].get_attribute("innerHTML"), "lxml").get_text()
+                select_sekolah.select_by_visible_text(sekolah)
+                time.sleep(5)
+
+                # get tahun
+                if "2019" in url:
+                    tahun = "2019"
+                elif "2018" in url:
+                    tahun = "2018"
+
+                # get id sekolah
+                sekolah = sekolah.split(" ", 1)
+                id_sekolah = query.get_id_sekolah(sekolah[1])
+                
+                # get id prodi
+                select_jenjang = Select(browser.find_element_by_id("page"))
+                jenjang = select_jenjang.first_selected_option.text
+                if jenjang == "SMP/MTs":
+                    prodi = "SMP/MTs"
+                id_prodi = query.get_id_prodi(prodi)
+
+                list_matuji = BeautifulSoup(browser.find_element_by_id("matauji").get_attribute("innerHTML"), "lxml").find_all("option")
+                select_matuji = Select(browser.find_element_by_id("matauji"))
+                for matuji in list_matuji:
+                    matuji = matuji.text.lstrip()
+                    select_matuji.select_by_visible_text(matuji)
+                    time.sleep(5)
+                    select_matuji = Select(browser.find_element_by_id("matauji"))
+                    id_matuji = query.get_id_matuji(matuji)
+
+                    # get tabel nilai materi
+                    get_tabel_materi = browser.find_elements_by_xpath("/html/body/div[3]/div[3]/div/div[2]/div/div[2]/table/tbody/tr")
+                    for data_materi in get_tabel_materi:
+                        data_materi = BeautifulSoup(data_materi.get_attribute("innerHTML"), "lxml")
+                        data_materi = data_materi.find_all("td")
+                        materi = data_materi[1].text
+                        nilai = data_materi[2].text
+
+                        id_materi = query.get_id_materi(materi)
+                        
+                        print(id_materi, id_matuji, id_prodi, id_sekolah, materi, nilai, tahun)
+                    
+                    #biar ga error
+                    list_sekolah = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[1]/div/table/tbody/tr[2]/td[3]/select/option")
+                    list_sekolah.pop(0)
+                    select_sekolah = Select(browser.find_element_by_id("sekolah"))
+
+                    # get tabel nilai indikator
+                    get_indikator = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[2]/div/div[6]/table/tbody/tr")
+                    for i in get_indikator:
+                        data_indikator = BeautifulSoup(i.get_attribute("innerHTML"), "lxml").find_all("td")
+                        if len(data_indikator) < 2:
+                            materi = data_indikator[0].text.split(" ", 1)
+                            id_materi = query.get_id_materi(materi[1])
+                        else:
+                            indikator = data_indikator[1].text
+                            id_indikator = query.get_id_indikator(indikator)
+
+                            nilai = data_indikator[2].text
+                            print(id_indikator, id_matuji, id_materi, id_prodi, id_sekolah, nilai, tahun)
+
+            select_kota = Select(browser.find_element_by_id("rayon"))
+        browser.quit()
+    except Exception as ex:
+        print(ex)
+        # browser.quit()
+
+links = [
+        "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!daya_serap!01&99&999!T&01&1&T&1&!3!&"
+        # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!daya_serap!01&99&999!T&01&1&T&1&!3!&",
+        # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!daya_serap!01&99&999!T&01&1&T&1&!3!&",
+        # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!daya_serap!01&99&999!T&01&1&T&1&!3!&",
+        # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketc!daya_serap!01&99&999!T&01&1&T&1&!3!&",
+        # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketb!daya_serap!01&99&999!T&01&1&T&1&!3!&"
+        ]
+
+jenjangs = ["smp", "sma", "smk", "paketb", "paketc"]
+tahuns = ["2019", "2018"]
+for jenjang in jenjangs:
+    for tahun in tahuns:
+        for i in range(1, 35):
+            if i < 10:
+                i = "0"+str(i)
+            url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!daya_serap!{i}01&99&999!T&01&1&T&1&!3!&'
+            # links.append(url)
+
+with ProcessPoolExecutor(max_workers=1) as executor:
+    futures = [ executor.submit(get_nilai_materi, url) for url in links ]
+    results = []
+    for result in as_completed(futures):
+        results.append(result)

@@ -35,7 +35,7 @@ def get_materi_ujian():
         if matuji.text.lstrip() == "DOKTRIN GEREJA KATOLIK & MORAL KRISTIANI":
             continue
         select.select_by_visible_text(matuji.text.lstrip())
-        time.sleep(15)
+        time.sleep(5)
         select = Select(browser.find_element_by_xpath('//*[@id="matauji"]'))
 
         matuji = matuji.text.lstrip()
@@ -78,7 +78,7 @@ for tahun in tahuns:
         if (jenjang == "paketc" and tahun == "2019") or (jenjang == "paketc" and tahun == "2018") or (jenjang == "paketb" and tahun == "2019") or (jenjang == "paketb" and tahun == "2018"):
                 continue
         browser.get("https://hasilun.puspendik.kemdikbud.go.id/#" + tahun + "!" + jenjang + "!daya_serap!99&99&999!T&T&T&T&1&!1!&")
-        time.sleep(10)
+        time.sleep(5)
         # materi ujian
         try:
             get_jenjang = browser.find_element_by_xpath("//div[3]/div[3]/div/div/div/table/tbody/tr/td/select/option[@selected='']")

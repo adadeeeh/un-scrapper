@@ -74,7 +74,10 @@ def get_id_materi(materi):
     query = """select id_materi from materi_ujian where materi=%s"""
     cursor.execute(query, materi)
     result = cursor.fetchone()
-    return result[0]
+    if result:
+        return result[0]
+    else:
+        pass
 
 def indikator_materi(data):
     insert_query = "insert into indikator_materi(id_materi, indikator) values(%s, %s)"
