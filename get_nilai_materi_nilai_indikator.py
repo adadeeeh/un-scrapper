@@ -10,6 +10,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
 initdb.create_nilai_materi_db()
+initdb.create_nilai_indikator_db()
 
 def log(text):
     print (text, file=open("log.txt", "a"))
@@ -74,6 +75,8 @@ def get_nilai_materi(url):
                     # get tabel nilai materi
                     get_tabel_materi = browser.find_elements_by_xpath("/html/body/div[3]/div[3]/div/div[2]/div/div[2]/table/tbody/tr")
                     for data_materi in get_tabel_materi:
+                        print("Nilai Materi")
+                        data = []
                         data_materi = BeautifulSoup(data_materi.get_attribute("innerHTML"), "lxml")
                         data_materi = data_materi.find_all("td")
                         materi = data_materi[1].text
@@ -81,7 +84,16 @@ def get_nilai_materi(url):
 
                         id_materi = query.get_id_materi(materi)
                         
-                        print(id_materi, id_matuji, id_prodi, id_sekolah, materi, nilai, tahun)
+                        data.append(id_materi)
+                        data.append(id_matuji)
+                        data.append(id_prodi)
+                        data.append(id_sekolah)
+                        # data.append(materi)
+                        data.append(nilai)
+                        data.append(tahun)
+
+                        query.nilai_materi(data)
+                        print(data)
                     
                     #biar ga error
                     list_sekolah = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[1]/div/table/tbody/tr[2]/td[3]/select/option")
@@ -91,6 +103,8 @@ def get_nilai_materi(url):
                     # get tabel nilai indikator
                     get_indikator = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[2]/div/div[6]/table/tbody/tr")
                     for i in get_indikator:
+                        print("Nilai Indikator")
+                        data = []
                         data_indikator = BeautifulSoup(i.get_attribute("innerHTML"), "lxml").find_all("td")
                         if len(data_indikator) < 2:
                             materi = data_indikator[0].text.split(" ", 1)
@@ -100,7 +114,17 @@ def get_nilai_materi(url):
                             id_indikator = query.get_id_indikator(indikator)
 
                             nilai = data_indikator[2].text
-                            print(id_indikator, id_matuji, id_materi, id_prodi, id_sekolah, nilai, tahun)
+
+                            data.append(id_indikator)
+                            data.append(id_matuji)
+                            data.append(id_materi)
+                            data.append(id_prodi)
+                            data.append(id_sekolah)
+                            data.append(nilai)
+                            data.append(tahun)
+
+                            query.nilai_indikator(data)
+                            print(data)
 
             select_kota = Select(browser.find_element_by_id("rayon"))
         browser.quit()

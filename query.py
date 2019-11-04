@@ -178,3 +178,13 @@ def infografis(data):
     insert_query = "insert into infografis_wilayah(id_prov, tahun, jenjang_sekolah, jenis, link) values(%s, %s, %s, %s, %s)"
     cursor.execute(insert_query, data)
     db.commit()
+
+def nilai_materi(data):
+    insert_query = "insert into nilai_materi(id_materi, id_matuji, id_prodi, id_sekolah, avg_materi, tahun_avgmateri) values(%s, %s, %s, %s, %s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit()
+
+def nilai_indikator(data):
+    insert_query = "insert into nilai_indikator(id_indikator, id_matuji, id_materi, id_prodi, id_sekolah, avg_indikator, tahun_avgindikator) values(%s, %s, %s, %s, %s, %s, %s)"
+    cursor.execute(insert_query, data)
+    db.commit() 

@@ -23,6 +23,7 @@ drop_nilai_matuji = "drop table nilai_matuji"
 drop_soal_rilis = "drop table soal_rilis"
 drop_infografis_wilayah = "drop table infografis_wilayah"
 drop_nilai_materi = "drop table nilai_materi"
+drop_nilai_indikator = "drop table nilai_indikator"
 
 create_provinsi = """CREATE TABLE provinsi (
     id_prov int, nama_prov varchar(256), PRIMARY KEY (id_prov)
@@ -85,6 +86,11 @@ create_nilai_materi = """create table nilai_materi (
     id_relasiavgmateri int not null auto_increment, id_materi int, id_matuji int, id_prodi int, id_sekolah varchar(256), avg_materi varchar(10), tahun_avgmateri int,
     primary key(id_relasiavgmateri), foreign key (id_materi) references materi_ujian(id_materi), foreign key (id_matuji) references mata_ujian(id_matuji),
     foreign key (id_prodi) references prodi(id_prodi), foreign key (id_sekolah) references sekolah(id_sekolah));"""
+
+create_nilai_indikator = """create table nilai_indikator (
+    id_relasiavgindi int not null auto_increment, id_indikator int, id_matuji int, id_materi int, id_prodi int, id_sekolah varchar(256), avg_indikator varchar(10), tahun_avgindikator int,
+    primary key(id_relasiavgindi), foreign key (id_indikator) references indikator_materi(id_indikator), foreign key (id_matuji) references mata_ujian(id_matuji),
+    foreign key (id_materi) references materi_ujian(id_materi), foreign key (id_prodi) references prodi(id_prodi), foreign key (id_sekolah) references sekolah(id_sekolah));"""
 
 def get_cursor(db):
     return db.cursor()
@@ -257,3 +263,15 @@ def create_nilai_materi_db():
         cursor.execute(create_nilai_materi)
     except:
         cursor.execute(create_nilai_materi)
+
+def create_nilai_indikator_db():
+    db = pymysql.connect(host, user, password, dbname)
+    cursor = db.cursor()
+
+    try:
+        cursor.execute(set_0)
+        cursor.execute(drop_nilai_indikator)
+        cursor.execute(set_1)
+        cursor.execute(create_nilai_indikator)
+    except:
+        cursor.execute(create_nilai_indikator)
