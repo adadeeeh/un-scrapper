@@ -108,7 +108,10 @@ def get_id_indikator(data):
     query = """select id_indikator from indikator_materi where indikator=%s"""
     cursor.execute(query, data)
     result = cursor.fetchone()
-    return result[0]
+    if result:
+        return result[0]
+    else:
+        pass
 
 def relasi_matindor(data):
     insert_query = "insert into relasi_matindor(id_materi, id_prodi, id_indikator, id_matuji, urutan_indikator, tahun_indikator) values(%s, %s, %s, %s, %s, %s)"
