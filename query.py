@@ -145,7 +145,7 @@ def relasi_sekolah_moda(data):
     db.commit()
 
 def get_id_relasi_sekolah_moda(data):
-    query = """select id_sekolah from relasi_sekolahmoda where id_sekolah=%s"""
+    query = """select id_sekolah from relasi_sekolahmoda where id_sekolah=%s and id_moda=%s and tahun_ajaran=%s"""
     cursor.execute(query, data)
     result = cursor.fetchone()
     if result:
@@ -158,10 +158,28 @@ def relasi_sekolah_memiliki_prodi(data):
     cursor.execute(insert_query, data)
     db.commit()
 
+def get_id_relasi_sekolah_prodi(data):
+    query = """select id_sekolah from sekolah_memiliki_prodi where id_sekolah=%s and id_prodi=%s and jumlah_siswa=%s and tahun_jumlahsiswa=%s"""
+    cursor.execute(query, data)
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        pass
+
 def nilai_matuji(data):
     insert_query = "insert into nilai_matuji(id_matuji, id_prodi, id_sekolah, avg_matuji, tahun_avgmatuji) values(%s, %s, %s, %s, %s)"
     cursor.execute(insert_query, data)
     db.commit()
+
+def get_id_nilai_matuji(data):
+    query = """select id_relasiavgmatuji from nilai_matuji where id_matuji=%s and id_prodi=%s and id_sekolah=%s and avg_matuji=%s and tahun_avgmatuji=%s"""
+    cursor.execute(query, data)
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        pass
 
 def soal_rilis(data):
     insert_query = "insert into soal_rilis(tahun, link, judul) values(%s, %s, %s)"

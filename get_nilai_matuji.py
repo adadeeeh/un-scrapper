@@ -93,12 +93,17 @@ def get_data(browser, id_prodi, tahun):
             data.append(id_sekolah)
             data.append(nilai_matuji)
             data.append(tahun)
+
+            #cek data if exist
+            id_avgmatuji = query.get_id_nilai_matuji(data)
+            if id_avgmatuji:
+                continue
             print(data)
             # query.nilai_matuji(data)
 
 links = [
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&99&999!T&T&T&T&1&!3!&",
-        # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!T&T&T&T&1&!3!&",
+        "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!T&T&T&T&1&!3!&",
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&99&999!T&T&T&T&1&!3!&",
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!T&T&T&T&1&!3!&",
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!capaian!01&99&999!T&T&T&T&1&!3!&",
@@ -107,15 +112,12 @@ links = [
         ]
 
 jenjangs = ["smp", "sma", "smk", "paketb", "paketc"]
-modas = ["unbk", "unkp"]
 tahuns = ["2019", "2018"]
 for jenjang in jenjangs:
     for tahun in tahuns:
         for i in range(1, 35):
             if i < 10:
                 i = "0"+str(i)
-            if jenjang == "paketb" or jenjang == "paketc":
-                moda = "1"
             url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!capaian!{i}&99&999!T&T&T&T&1&!3!&'
             # links.append(url)
 

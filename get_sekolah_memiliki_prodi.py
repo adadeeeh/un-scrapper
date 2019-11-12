@@ -78,29 +78,47 @@ def get_data(browser, id_prodi, tahun):
         data.append(jumlah_peserta)
         data.append(tahun)
 
+        #check data if exists
+        cek_id = query.get_id_relasi_sekolah_prodi(data)
+        if cek_id == id_sekolah:
+           continue
+
         print(data)
         query.relasi_sekolah_memiliki_prodi(data)
 
 
 links = [
-        # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&99&999!T&T&T&T&1&!3!&",
-        "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!T&T&T&T&1&!3!&",
+        "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&99&999!T&T&T&T&1&!3!&",
+        # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!T&T&T&T&1&!3!&",
+        # "https://hasilun.puspendik.kemdikbud.go.id/#2018!sma!capaian!01&99&999!T&T&T&T&1&!3!&",
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!capaian!01&99&999!T&T&T&T&1&!3!&",
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketc!capaian!01&99&999!T&T&T&T&1&!3!&",
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketb!capaian!01&99&999!T&T&T&T&1&!3!&"
         ]
 
 jenjangs = ["smp", "sma", "smk", "paketb", "paketc"]
-modas = ["unbk", "unkp"]
 tahuns = ["2019", "2018"]
 for jenjang in jenjangs:
     for tahun in tahuns:
         for i in range(1, 35):
             if i < 10:
                 i = "0"+str(i)
-            if jenjang == "paketb" or jenjang == "paketc":
-                moda = "1"
-            url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!capaian!{i}&99&999!T&T&T&T&1&!3!&'
+                if jenjang == "paketb" or jenjang == "paketc":
+                    url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!capaian!{i}&99&999!T&T&T&T&1&!3!&'
+                    links.append(url)
+                else:
+                    url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!capaian!{i}&99&999!T&T&T&T&1&!3!&'
+                    links.append(url)
+            elif i >= 10:
+                if jenjang == "paketb" or jenjang == "paketc":
+                    url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!capaian!{i}&99&999!T&T&T&T&1&!3!&'
+                    links.append(url)
+                else:
+                    url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!capaian!{i}&99&999!T&T&T&T&1&!3!&'
+                    links.append(url)
+            # if i < 10:
+            #     i = "0"+str(i)
+            # url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!capaian!{i}&99&999!T&T&T&T&1&!3!&'
             # links.append(url)
 
 with ProcessPoolExecutor(max_workers=1) as executor:

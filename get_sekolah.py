@@ -162,30 +162,41 @@ def get_data(browser, jenjang, jenis):
         if id_sekolah:
             continue
         print(sekolah)
-        query.sekolah(sekolah)
+        try:
+            query.sekolah(sekolah)
+        except:
+            pass
 
 links = [
-            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&01&999!T&T&1&T&1&unbk!3!&",
+            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&01&999!T&T&1&T&1&!3!&",
             # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smp!capaian!01&01&999!T&T&1&T&1&unkp!3!&",
-            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!b&T&T&T&1&unbk!3!&",
+            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!b&T&T&T&1&!3!&",
             # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!capaian!01&99&999!b&T&T&T&1&unkp!3!&",
-            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!capaian!01&01&999!T&T&1&T&1&unbk!3!&",
+            # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!capaian!01&01&999!T&T&1&T&1&!3!&",
             # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!capaian!01&01&999!T&T&1&T&1&unkp!3!&",
             # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketb!capaian!01&01&999!T&T&T&T&1&!3!&",
             # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketc!capaian!01&01&999!T&T&T&T&1&!3!&"
         ]
 
-jenjangs = ["smp", "sma", "smk", "paketb", "paketc"]
-modas = ["unbk", "unkp"]
+jenjangs = ["smp"]
+#"smp", "sma", "smk", "paketb", "paketc"
 for jenjang in jenjangs:
-    for moda in modas:
-        for i in range(1, 35):
-            if i < 10:
-                i = "0"+str(i)
+    for i in range(1, 2):
+        if i < 10:
+            i = "0"+str(i)
             if jenjang == "paketb" or jenjang == "paketc":
-                moda = "1"
-            url = f'https://hasilun.puspendik.kemdikbud.go.id/#2019!{jenjang}!capaian!{i}&01&999!T&T&1&T&1&{moda}!3!&'
-            links.append(url)
+                url = f'https://hasilun.puspendik.kemdikbud.go.id/#2019!{jenjang}!capaian!{i}&01&999!T&T&T&T&1&!3!&'
+                links.append(url)
+            else:
+                url = f'https://hasilun.puspendik.kemdikbud.go.id/#2019!{jenjang}!capaian!{i}&01&999!T&T&1&T&1&!3!&'
+                links.append(url)
+        elif i >= 10:
+            if jenjang == "paketb" or jenjang == "paketc":
+                url = f'https://hasilun.puspendik.kemdikbud.go.id/#2019!{jenjang}!capaian!{i}&01&999!T&T&T&T&1&!3!&'
+                links.append(url)
+            else:
+                url = f'https://hasilun.puspendik.kemdikbud.go.id/#2019!{jenjang}!capaian!{i}&01&999!T&T&1&T&1&!3!&'
+                links.append(url)
 
 with ProcessPoolExecutor(max_workers=1) as executor:
     futures = [ executor.submit(get_sekolah, url) for url in links ]
