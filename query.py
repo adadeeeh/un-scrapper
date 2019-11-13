@@ -205,7 +205,25 @@ def nilai_materi(data):
     cursor.execute(insert_query, data)
     db.commit()
 
+def get_id_nilai_materi(data):
+    query = """select id_relasiavgmateri from nilai_materi where id_materi=%s and id_matuji=%s and id_prodi=%s and id_sekolah=%s and avg_materi=%s and tahun_avgmateri=%s"""
+    cursor.execute(query, data)
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        pass
+
 def nilai_indikator(data):
     insert_query = "insert into nilai_indikator(id_indikator, id_matuji, id_materi, id_prodi, id_sekolah, avg_indikator, tahun_avgindikator) values(%s, %s, %s, %s, %s, %s, %s)"
     cursor.execute(insert_query, data)
-    db.commit() 
+    db.commit()
+
+def get_id_nilai_indikator(data):
+    query = """select id_relasiavgindi from nilai_indikator where id_indikator=%s and id_matuji=%s and id_materi=%s and id_prodi=%s and id_sekolah=%s and avg_indikator=%s and tahun_avgindikator=%s"""
+    cursor.execute(query, data)
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        pass

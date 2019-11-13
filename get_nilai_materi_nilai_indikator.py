@@ -9,8 +9,8 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 db = initdb.get_db()
 cursor = initdb.get_cursor(db)
-initdb.create_nilai_materi_db()
-initdb.create_nilai_indikator_db()
+# initdb.create_nilai_materi_db()
+# initdb.create_nilai_indikator_db()
 
 def log(text):
     print (text, file=open("log.txt", "a"))
@@ -56,6 +56,13 @@ def get_nilai_materi(url):
                 sekolah = sekolah.split(" ", 1)
                 id_sekolah = query.get_id_sekolah(sekolah[1])
                 
+                # cek id sekolah
+                if not id_sekolah:
+                    list_sekolah = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[1]/div/table/tbody/tr[2]/td[3]/select/option")
+                    list_sekolah.pop(0)
+                    select_sekolah = Select(browser.find_element_by_id("sekolah"))
+                    continue
+
                 # get id prodi
                 select_jenjang = Select(browser.find_element_by_id("page"))
                 jenjang = select_jenjang.first_selected_option.text
@@ -102,7 +109,7 @@ def get_data(browser, id_prodi, id_sekolah, tahun):
         # get tabel nilai materi
         get_tabel_materi = browser.find_elements_by_xpath("/html/body/div[3]/div[3]/div/div[2]/div/div[2]/table/tbody/tr")
         for data_materi in get_tabel_materi:
-            print("Nilai Materi")
+            # print("Nilai Materi")
             data = []
             data_materi = BeautifulSoup(data_materi.get_attribute("innerHTML"), "lxml")
             data_materi = data_materi.find_all("td")
@@ -118,13 +125,18 @@ def get_data(browser, id_prodi, id_sekolah, tahun):
             data.append(nilai)
             data.append(tahun)
 
+            #cek data if exist
+            id_avgmateri = query.get_id_nilai_materi(data)
+            if id_avgmateri:
+                continue
+
             query.nilai_materi(data)
             print(data)        
 
         # get tabel nilai indikator
         get_indikator = browser.find_elements_by_xpath("//div[3]/div[3]/div/div[2]/div/div[6]/table/tbody/tr")
         for i in get_indikator:
-            print("Nilai Indikator")
+            # print("Nilai Indikator")
             data = []
             data_indikator = BeautifulSoup(i.get_attribute("innerHTML"), "lxml").find_all("td")
             if len(data_indikator) < 2:
@@ -144,6 +156,11 @@ def get_data(browser, id_prodi, id_sekolah, tahun):
                 data.append(nilai)
                 data.append(tahun)
 
+                #cek data if exist
+                id_avgindikator = query.get_id_nilai_indikator(data)
+                if id_avgindikator:
+                    continue
+
                 query.nilai_indikator(data)
                 print(data)
 
@@ -152,10 +169,11 @@ links = [
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!sma!daya_serap!01&99&999!a&01&1&T&1&!3!&",
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!smk!daya_serap!01&99&999!T&01&1&T&1&!3!&",
         # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketc!daya_serap!01&99&999!a&01&T&T&1&!1!&",
-        "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketb!daya_serap!01&99&999!T&01&T&T&1&!3!&"
+        # "https://hasilun.puspendik.kemdikbud.go.id/#2019!paketb!daya_serap!02&99&999!T&01&T&T&1&!3!&",
         ]
 
 jenjangs = ["smp", "sma", "smk", "paketb", "paketc"]
+#"smp", "sma", "smk", "paketb", "paketc"
 tahuns = ["2019", "2018"]
 prodis = ["b", "a", "s", "g", "k", "p"]
 for jenjang in jenjangs:
@@ -166,16 +184,17 @@ for jenjang in jenjangs:
             if jenjang == "sma":
                 for prodi in prodis:
                     url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!daya_serap!{i}&99&999!{prodi}&01&1&T&1&!3!&'
-                    # links.append(url)
+                    links.append(url)
             elif jenjang == "paketc":
                 for j in range(1, 3):
                     url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!daya_serap!{i}&99&999!{prodis[j]}&01&T&T&1&!1!&'
-                    # links.append(url)
+                    links.append(url)
             elif jenjang == "paketb":
                 url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!daya_serap!{i}&99&999!T&01&T&T&1&!3!&'
-                # links.append(url)
-            url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!daya_serap!{i}&99&999!T&01&1&T&1&!3!&'
-            # links.append(url)
+                links.append(url)
+            elif jenjang == "smp":
+                url = f'https://hasilun.puspendik.kemdikbud.go.id/#{tahun}!{jenjang}!daya_serap!{i}&99&999!T&01&1&T&1&!3!&'
+                links.append(url)
 
 with ProcessPoolExecutor(max_workers=1) as executor:
     futures = [ executor.submit(get_nilai_materi, url) for url in links ]
